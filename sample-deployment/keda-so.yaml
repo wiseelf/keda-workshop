@@ -22,11 +22,11 @@ spec:
               value: 5
               periodSeconds: 60
   triggers:
-    - type: cpu
-      metricType: Utilization # Allowed types are 'Utilization' or 'AverageValue'
-      metadata:
-        value: "50"
-        containerName: "nginx" # Optional. You can use this to target a specific container in a pod
+    # - type: cpu
+    #   metricType: Utilization # Allowed types are 'Utilization' or 'AverageValue'
+    #   metadata:
+    #     value: "90"
+    #     containerName: "nginx" # Optional. You can use this to target a specific container in a pod
     - type: metrics-api
       useCachedMetrics: true
       metadata:
@@ -36,7 +36,7 @@ spec:
     - type: cron
       metadata:
         # Required
-        timezone: Europe/Kyiv # The acceptable values would be a value from the IANA Time Zone Database.
+        timezone: Europe/Kiev # The acceptable values would be a value from the IANA Time Zone Database.
         start: 30 * * * * # Every hour on the 30th minute
         end: 45 * * * * # Every hour on the 45th minute
         desiredReplicas: "10"
