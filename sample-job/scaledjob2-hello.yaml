@@ -18,7 +18,7 @@ spec:
         restartPolicy: Never
         containers:
           - name: helloworld
-            image: hello-world:latest
+            image: busybox:latest
             command:
               - sleep
               - "120"
@@ -34,4 +34,4 @@ spec:
       metadata:
         targetValue: "10"
         url: http://noc.opsworks.co:8080/scaler/
-        valueLocation: "job1"
+        valueLocation: "job2"

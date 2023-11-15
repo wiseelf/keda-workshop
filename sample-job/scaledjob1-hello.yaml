@@ -18,10 +18,10 @@ spec:
         restartPolicy: Never
         containers:
           - name: helloworld
-            image: hello-world:latest
+            image: busybox:latest
             command:
               - sleep
-              - "60"
+              - "120"
     backoffLimit: 1
     ttlSecondsAfterFinished: 60
   pollingInterval: 60
