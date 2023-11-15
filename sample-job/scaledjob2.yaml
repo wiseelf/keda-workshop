@@ -2,13 +2,13 @@ apiVersion: v1
 kind: Namespace
 metadata:
   creationTimestamp: null
-  name: job1
+  name: job2
 ---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledJob
 metadata:
   name: helloworld
-  namespace: job1
+  namespace: job2
   labels:
     scaler.keda: "true"
 spec:
@@ -33,5 +33,6 @@ spec:
     - type: metrics-api
       metadata:
         targetValue: "10"
+        activationTargetValue: "6"
         url: http://noc.opsworks.co:8080/scaler/
         valueLocation: "job2"
