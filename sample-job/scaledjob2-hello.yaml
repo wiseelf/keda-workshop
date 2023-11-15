@@ -21,10 +21,10 @@ spec:
             image: busybox:latest
             command:
               - sleep
-              - "120"
+              - "60"
     backoffLimit: 1
     ttlSecondsAfterFinished: 60
-  pollingInterval: 60
+  pollingInterval: 15
   minReplicaCount: 0
   maxReplicaCount: 10
   successfulJobsHistoryLimit: 0
