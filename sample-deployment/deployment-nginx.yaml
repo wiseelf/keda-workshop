@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginxinc/nginx-unprivileged:1.25.3-alpine3.18
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 15M
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: nginx-hpa
+  namespace: nginx
+  labels:
+    scaler.keda: "true"
+spec:
+  scaleTargetRef:
+    name: nginx
+    envSourceContainerName: nginx
+  pollingInterval: 15
+  cooldownPeriod: 30
+  minReplicaCount: 2
+  maxReplicaCount: 10
+  advanced:
+    restoreToOriginalReplicaCount: false
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 30
+          policies:
+            - type: Pods
+              value: 5
+              periodSeconds: 30
+  triggers:
+    - type: cpu
+      metricType: Utilization # Allowed types are 'Utilization' or 'AverageValue'
+      metadata:
+        value: "90"
+        containerName: "nginx" # Optional. You can use this to target a specific container in a pod
+    - type: metrics-api
+      useCachedMetrics: true
+      metadata:
+        targetValue: "1"
+        url: http://noc.opsworks.co:8080/scaler/
+        valueLocation: "nginx"
+    - type: cron
+      metadata:
+        # Required
+        timezone: Europe/Kiev # The acceptable values would be a value from the IANA Time Zone Database.
+        start: 30 * * * * # Every hour on the 30th minute
+        end: 45 * * * * # Every hour on the 45th minute
+        desiredReplicas: "10"
