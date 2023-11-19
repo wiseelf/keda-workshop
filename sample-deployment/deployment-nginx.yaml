@@ -43,6 +43,9 @@ spec:
   cooldownPeriod: 30
   minReplicaCount: 2
   maxReplicaCount: 10
+  fallback:
+    failureThreshold: 3
+    replicas: 6
   advanced:
     restoreToOriginalReplicaCount: false
     horizontalPodAutoscalerConfig:
